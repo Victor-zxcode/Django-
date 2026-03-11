@@ -24,6 +24,3 @@ urlpatterns = [
     path('', views.home, name='home'),
 ]
 
-admin.AdminSite.site_header = "Administração do Sistema"
-admin.AdminSite.site_title = "Administração do Sistema"
-admin.AdminSite.index_title = "Bem-vindo à Administração do Sistema"

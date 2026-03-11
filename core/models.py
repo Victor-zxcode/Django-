@@ -17,7 +17,7 @@ class Produtos(models.Model):
         return self.nome
 
 class Estoques(models.Model):
-    produto = models.OneToOneField(Produtos, on_delete=models.CASCADE, related_name="estoque")
+    produto = models.OneToOneField(Produtos, on_delete=models.CASCADE, related_name="estoque") 
     quantidade = models.IntegerField()
 
     class Meta:

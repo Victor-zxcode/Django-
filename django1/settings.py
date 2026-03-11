@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'core',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -122,3 +123,18 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_FILES_DIRS = [BASE_DIR / 'static']
 AUTH_USER_MODEL = 'core.Usuario'
+
+ASGI_APPLICATION = "django1.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Loja de Eletrônicos - Administração",
+}
