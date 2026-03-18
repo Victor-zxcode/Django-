@@ -43,18 +43,27 @@ class Clientes(models.Model):
         return self.nome
 
 
-class Pedidos(models.Model):
-    cliente = models.ForeignKey(Clientes, on_delete=models.CASCADE)
-    produto = models.ForeignKey(Produtos, on_delete=models.CASCADE)
-    quantidade = models.IntegerField()
-    data_pedido = models.DateTimeField(auto_now_add=True)
+class Pedido(models.Model):
+    criado_em = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = 'Pedido'
         verbose_name_plural = 'Pedidos'
 
     def __str__(self):
-        return f"Pedido de {self.cliente.nome} - {self.produto.nome}"
+        return f"Pedido {self.id}"
+
+
+
+class ItemPedido(models.Model):
+    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
+    produto = models.ForeignKey(Produtos, on_delete=models.CASCADE)
+    quantidade = models.IntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.produto.nome} - {self.quantidade}"
+
+        
     
 
 class Usuario(AbstractUser):

@@ -1,22 +1,35 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ProdutoForm, ClienteForm, PedidoForm, UsuarioForm
 from .models import *
 
 # Create your views here.
 
 def home(request):
-    return render(request, 'home.html')
+    produtos = Produtos.objects.all()
+    return render(request, 'home.html', {'produtos': produtos})
 
 def listar_produtos(request):
     produtos = Produtos.objects.all()
     return render(request, 'listar_produtos.html', {'produtos': produtos})
 
 
+def comprar_produto(request, id):
+    produto = get_object_or_404(Produtos, id=id)
 
+    if request.method == 'POST':
+        pedido = Pedido.objects.create()
 
+        ItemPedido.objects.create(
+            pedido=pedido,
+            produto=produto,
+            quantidade=1
+        )
 
+        return redirect('home')
 
-
+    return render(request, 'comprar_produto.html', {
+        'produto': produto
+    })
 
 
 
