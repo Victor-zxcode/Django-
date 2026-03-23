@@ -241,6 +241,108 @@
 
 
 <!-- ═══════════════════════════════════════════
+     COMO FUNCIONA
+═══════════════════════════════════════════ -->
+<section class="como-funciona">
+  <div class="container">
+
+    <div class="como-funciona__header">
+      <div class="section-header__label">Simples assim</div>
+      <h2 class="como-funciona__titulo">Como funciona</h2>
+      <p class="como-funciona__sub">
+        Do cadastro ao acesso ao produto em menos de 2 minutos.
+      </p>
+    </div>
+
+    <div class="como-funciona__grid">
+
+      <!-- Passo 1 -->
+      <div class="passo passo--1">
+        <div class="passo__topo">
+          <span class="passo__numero">01</span>
+          <div class="passo__icone">
+            <i data-lucide="user-plus" class="passo__lucide"></i>
+          </div>
+        </div>
+        <h3 class="passo__titulo">Crie sua conta</h3>
+        <p class="passo__desc">
+          Cadastre-se gratuitamente em segundos. Nenhum cartão de crédito necessário para começar a explorar.
+        </p>
+        <a href="{% url 'cadastro' %}" class="passo__link">
+          Criar conta grátis
+          <i data-lucide="arrow-right" style="width:13px;height:13px;stroke-width:2;"></i>
+        </a>
+      </div>
+
+      <!-- Seta -->
+      <div class="passo__seta">
+        <i data-lucide="arrow-right" class="passo__seta-icon"></i>
+      </div>
+
+      <!-- Passo 2 -->
+      <div class="passo passo--2">
+        <div class="passo__topo">
+          <span class="passo__numero">02</span>
+          <div class="passo__icone">
+            <i data-lucide="search" class="passo__lucide"></i>
+          </div>
+        </div>
+        <h3 class="passo__titulo">Encontre o produto ideal</h3>
+        <p class="passo__desc">
+          Navegue por centenas de cursos, e-books e templates. Filtre por categoria e encontre o que precisa.
+        </p>
+        <a href="{% url 'produtos' %}" class="passo__link">
+          Ver produtos
+          <i data-lucide="arrow-right" style="width:13px;height:13px;stroke-width:2;"></i>
+        </a>
+      </div>
+
+      <!-- Seta -->
+      <div class="passo__seta">
+        <i data-lucide="arrow-right" class="passo__seta-icon"></i>
+      </div>
+
+      <!-- Passo 3 -->
+      <div class="passo passo--3">
+        <div class="passo__topo">
+          <span class="passo__numero">03</span>
+          <div class="passo__icone">
+            <i data-lucide="zap" class="passo__lucide"></i>
+          </div>
+        </div>
+        <h3 class="passo__titulo">Acesse na hora</h3>
+        <p class="passo__desc">
+          Após a compra, acesso imediato ao conteúdo e confirmação por e-mail. Rápido, simples e seguro.
+        </p>
+        <a href="{% url 'ofertas' %}" class="passo__link">
+          Ver ofertas
+          <i data-lucide="arrow-right" style="width:13px;height:13px;stroke-width:2;"></i>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Rodapé da seção -->
+    <div class="como-funciona__rodape">
+      <div class="como-funciona__garantia">
+        <i data-lucide="shield-check" class="como-funciona__garantia-icon"></i>
+        <span>Garantia de 7 dias em todos os produtos</span>
+      </div>
+      <div class="como-funciona__garantia">
+        <i data-lucide="lock" class="como-funciona__garantia-icon"></i>
+        <span>Pagamento 100% seguro</span>
+      </div>
+      <div class="como-funciona__garantia">
+        <i data-lucide="headphones" class="como-funciona__garantia-icon"></i>
+        <span>Suporte dedicado</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
      BANNER CTA
 ═══════════════════════════════════════════ -->
 <section class="cta-banner">
@@ -313,19 +415,15 @@
 </footer>
 
 
-<!-- Lucide Icons CDN -->
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>
-  // Ativa todos os ícones Lucide na página
   lucide.createIcons();
 
-  // Navbar scroll
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('navbar--scrolled', window.scrollY > 20);
   }, { passive: true });
 
-  // Mobile menu
   const hamburger = document.getElementById('hamburgerBtn');
   const navLinks  = document.getElementById('navLinks');
   hamburger.addEventListener('click', () => {
@@ -333,7 +431,7 @@
     hamburger.classList.toggle('navbar__hamburger--open');
   });
 
-  // Cards entrance animation
+  // Cards entrance
   const cards = document.querySelectorAll('.product-card');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -344,6 +442,18 @@
     });
   }, { threshold: 0.1 });
   cards.forEach(card => observer.observe(card));
+
+  // Passos entrance
+  const passos = document.querySelectorAll('.passo');
+  const obsPassos = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('passo--visible'), i * 120);
+        obsPassos.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  passos.forEach(p => obsPassos.observe(p));
 </script>
 
 {% endblock %}
