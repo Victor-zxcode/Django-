@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Carrinho — DigitalHub{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/carrinho.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<header class="navbar" id="navbar">
+  <div class="navbar__inner">
+    <a href="{% url 'home' %}" class="navbar__logo">
+      <span class="navbar__logo-icon">
+        <i data-lucide="layers" style="width:14px;height:14px;stroke-width:2;color:white;"></i>
+      </span>
+      <span class="navbar__logo-text">DigitalHub</span>
+    </a>
+    <nav class="navbar__links" id="navLinks">
+      <a href="{% url 'home' %}"          class="navbar__link">Home</a>
+      <a href="{% url 'produtos' %}"      class="navbar__link">Produtos</a>
+      <a href="{% url 'categorias' %}"    class="navbar__link">Categorias</a>
+      <a href="{% url 'ofertas' %}"       class="navbar__link">Ofertas</a>
+      <a href="{% url 'como_funciona' %}" class="navbar__link">Como funciona</a>
+      <a href="{% url 'contato' %}"       class="navbar__link">Contato</a>
+    </nav>
+    <div class="navbar__actions">
+      {% if user.is_authenticated %}
+        <a href="{% url 'carrinho' %}" class="btn btn--ghost navbar__cart">
+          <i data-lucide="shopping-cart" style="width:16px;height:16px;stroke-width:1.75;"></i>
+          {% if carrinho.quantidade_itens > 0 %}
+          <span class="navbar__cart-badge">{{ carrinho.quantidade_itens }}</span>
+          {% endif %}
+        </a>
+        <a href="{% url 'minha_conta' %}" class="btn btn--ghost">{{ user.username }}</a>
+        <a href="{% url 'logout' %}"      class="btn btn--primary">Sair</a>
+      {% else %}
+        <a href="{% url 'login' %}"    class="btn btn--ghost">Entrar</a>
+        <a href="{% url 'cadastro' %}" class="btn btn--primary">Cadastrar</a>
+      {% endif %}
+    </div>
+    <button class="navbar__hamburger" id="hamburgerBtn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="carrinho-wrapper">
+  <div class="container">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a href="{% url 'home' %}">Home</a>
+      <i data-lucide="chevron-right" style="width:13px;height:13px;color:var(--ink-300);"></i>
+      <span>Carrinho</span>
+    </nav>
+
+    <!-- Cabeçalho -->
+    <div class="carrinho-header">
+      <div>
+        <h1 class="carrinho-header__titulo">Meu carrinho</h1>
+        <p class="carrinho-header__sub">
+          {% if carrinho.quantidade_itens > 0 %}
+            {{ carrinho.quantidade_itens }} produto{{ carrinho.quantidade_itens|pluralize }} selecionado{{ carrinho.quantidade_itens|pluralize }}
+          {% else %}
+            Nenhum produto no carrinho
+          {% endif %}
+        </p>
+      </div>
+      <a href="{% url 'produtos' %}" class="btn btn--ghost">
+        <i data-lucide="arrow-left" style="width:14px;height:14px;stroke-width:2;"></i>
+        Continuar comprando
+      </a>
+    </div>
+
+    {% if carrinho.itens.all %}
+
+    <div class="carrinho-grid">
+
+      <!-- Lista de itens -->
+      <div class="carrinho-itens">
+
+        {% for item in carrinho.itens.all %}
+        <div class="carrinho-item">
+
+          <!-- Imagem -->
+          <div class="carrinho-item__img">
+            {% if item.produto.imagem %}
+              <img src="{{ item.produto.imagem.url }}" alt="{{ item.produto.nome }}">
+            {% else %}
+              <div class="carrinho-item__placeholder">
+                <i data-lucide="package" style="width:24px;height:24px;stroke-width:1;color:var(--ink-300);"></i>
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Info -->
+          <div class="carrinho-item__info">
+            {% if item.produto.categoria %}
+            <span class="carrinho-item__cat">{{ item.produto.categoria.nome }}</span>
+            {% endif %}
+            <h3 class="carrinho-item__nome">
+              <a href="{% url 'produto_detalhe' item.produto.id %}">{{ item.produto.nome }}</a>
+            </h3>
+            <p class="carrinho-item__desc">{{ item.produto.resumo|truncatewords:12 }}</p>
+          </div>
+
+          <!-- Preço e ações -->
+          <div class="carrinho-item__acoes">
+            <div class="carrinho-item__preco-wrap">
+              {% if item.produto.preco_original %}
+              <span class="carrinho-item__preco-old">R$ {{ item.produto.preco_original|floatformat:2 }}</span>
+              {% endif %}
+              <span class="carrinho-item__preco">R$ {{ item.produto.preco|floatformat:2 }}</span>
+            </div>
+            <a
+              href="{% url 'remover_carrinho' item.id %}"
+              class="carrinho-item__remover"
+              title="Remover do carrinho"
+            >
+              <i data-lucide="trash-2" style="width:15px;height:15px;stroke-width:1.75;"></i>
+              Remover
+            </a>
+          </div>
+
+        </div>
+        {% endfor %}
+
+      </div>
+
+      <!-- Resumo -->
+      <div class="carrinho-resumo">
+        <h2 class="carrinho-resumo__titulo">Resumo do pedido</h2>
+
+        <div class="carrinho-resumo__itens">
+          {% for item in carrinho.itens.all %}
+          <div class="carrinho-resumo__linha">
+            <span>{{ item.produto.nome|truncatewords:5 }}</span>
+            <span>R$ {{ item.produto.preco|floatformat:2 }}</span>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="carrinho-resumo__total">
+          <span>Total</span>
+          <span>R$ {{ carrinho.total|floatformat:2 }}</span>
+        </div>
+
+        <!-- Garantias -->
+        <div class="carrinho-resumo__garantias">
+          <div class="carrinho-resumo__garantia">
+            <i data-lucide="shield-check" style="width:14px;height:14px;stroke-width:2;color:var(--green);"></i>
+            <span>Garantia de 7 dias</span>
+          </div>
+          <div class="carrinho-resumo__garantia">
+            <i data-lucide="zap" style="width:14px;height:14px;stroke-width:2;color:var(--blue);"></i>
+            <span>Acesso imediato</span>
+          </div>
+          <div class="carrinho-resumo__garantia">
+            <i data-lucide="lock" style="width:14px;height:14px;stroke-width:2;color:var(--ink-400);"></i>
+            <span>Pagamento seguro</span>
+          </div>
+        </div>
+
+        <!-- Botão finalizar -->
+        <form method="post" action="{% url 'finalizar_carrinho' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn--primary btn--lg btn--full">
+            Finalizar compra — R$ {{ carrinho.total|floatformat:2 }}
+            <i data-lucide="arrow-right" style="width:16px;height:16px;stroke-width:2;"></i>
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+    {% else %}
+
+    <!-- Carrinho vazio -->
+    <div class="carrinho-vazio">
+      <div class="carrinho-vazio__icone">
+        <i data-lucide="shopping-cart" style="width:40px;height:40px;stroke-width:1;color:var(--ink-300);"></i>
+      </div>
+      <h2>Seu carrinho está vazio</h2>
+      <p>Explore nosso catálogo e adicione produtos ao carrinho.</p>
+      <a href="{% url 'produtos' %}" class="btn btn--primary btn--lg">
+        Ver produtos
+        <i data-lucide="arrow-right" style="width:16px;height:16px;stroke-width:2;"></i>
+      </a>
+    </div>
+
+    {% endif %}
+
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+  lucide.createIcons();
+
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('navbar--scrolled', window.scrollY > 20);
+  }, { passive: true });
+
+  const hamburger = document.getElementById('hamburgerBtn');
+  const navLinks  = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('navbar__links--open');
+    hamburger.classList.toggle('navbar__hamburger--open');
+  });
+</script>
+
+{% endblock %}

@@ -122,18 +122,23 @@
                 {{ produto.resumo|default:produto.descricao|truncatewords:14 }}
               </p>
 
-              <div class="pcard__footer">
-                <div class="pcard__pricing">
-                  {% if produto.preco_original %}
-                  <span class="pcard__price-old">R$ {{ produto.preco_original|floatformat:2 }}</span>
-                  {% endif %}
-                  <span class="pcard__price">R$ {{ produto.preco|floatformat:2 }}</span>
-                </div>
-                <a href="{% url 'comprar_produto' produto.id %}" class="btn btn--primary btn--sm">
-                  Comprar
-                </a>
-              </div>
-            </div>
+  <div class="pcard__pricing">
+    {% if produto.preco_original %}
+    <span class="pcard__price-old">R$ {{ produto.preco_original|floatformat:2 }}</span>
+    {% endif %}
+    <span class="pcard__price">R$ {{ produto.preco|floatformat:2 }}</span>
+  </div>
+  <div style="display:flex;gap:var(--s2);">
+    <a href="{% url 'adicionar_carrinho' produto.id %}"
+       class="btn btn--ghost btn--sm"
+       title="Adicionar ao carrinho">
+      <i data-lucide="shopping-cart" style="width:14px;height:14px;stroke-width:1.75;"></i>
+    </a>
+    <a href="{% url 'comprar_produto' produto.id %}" class="btn btn--primary btn--sm">
+      Comprar
+    </a>
+  </div>
+</div>
 
           </article>
           {% endfor %}

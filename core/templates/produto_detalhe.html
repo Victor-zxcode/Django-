@@ -71,14 +71,15 @@
 
         <!-- Botão comprar -->
         <div class="detalhe-acoes">
-          <a href="{% url 'comprar_produto' produto.id %}" class="btn btn--primary btn--lg">
-            Comprar agora
-            <i data-lucide="arrow-right" style="width:16px;height:16px;stroke-width:2;"></i>
-          </a>
-          <a href="{% url 'produtos' %}" class="btn btn--ghost btn--lg">
-            Ver mais produtos
-          </a>
-        </div>
+  <a href="{% url 'comprar_produto' produto.id %}" class="btn btn--primary btn--lg">
+    Comprar agora
+    <i data-lucide="arrow-right" style="width:16px;height:16px;stroke-width:2;"></i>
+  </a>
+  <a href="{% url 'adicionar_carrinho' produto.id %}" class="btn btn--ghost btn--lg">
+    <i data-lucide="shopping-cart" style="width:16px;height:16px;stroke-width:1.75;"></i>
+    Adicionar ao carrinho
+  </a>
+</div>
 
         <!-- Garantias -->
         <div class="detalhe-garantias">

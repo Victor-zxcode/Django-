@@ -32,14 +32,20 @@
     </nav>
 
     <div class="navbar__actions">
-      {% if user.is_authenticated %}
-        <a href="{% url 'minha_conta' %}" class="btn btn--ghost">{{ user.username }}</a>
-        <a href="{% url 'logout' %}"      class="btn btn--primary">Sair</a>
-      {% else %}
-        <a href="{% url 'login' %}"    class="btn btn--ghost">Entrar</a>
-        <a href="{% url 'cadastro' %}" class="btn btn--primary">Cadastrar</a>
+  {% if user.is_authenticated %}
+    <a href="{% url 'carrinho' %}" class="btn btn--ghost navbar__cart">
+      <i data-lucide="shopping-cart" style="width:16px;height:16px;stroke-width:1.75;"></i>
+      {% if carrinho and carrinho.quantidade_itens > 0 %}
+      <span class="navbar__cart-badge">{{ carrinho.quantidade_itens }}</span>
       {% endif %}
-    </div>
+    </a>
+    <a href="{% url 'minha_conta' %}" class="btn btn--ghost">{{ user.username }}</a>
+    <a href="{% url 'logout' %}"      class="btn btn--primary">Sair</a>
+  {% else %}
+    <a href="{% url 'login' %}"    class="btn btn--ghost">Entrar</a>
+    <a href="{% url 'cadastro' %}" class="btn btn--primary">Cadastrar</a>
+  {% endif %}
+</div>
 
     <button class="navbar__hamburger" id="hamburgerBtn" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -119,26 +125,13 @@
   <div class="container">
     <div class="categories__grid">
 
-      <a href="{% url 'categorias' %}?tipo=cursos" class="category-pill">
-        <i data-lucide="graduation-cap" class="pill-icon"></i>
-        Cursos
+      {% for categoria in categorias %}
+      <a href="{% url 'categoria_detalhe' categoria.slug %}" class="category-pill">
+        <i data-lucide="{{ categoria.icone_lucide|default:'folder' }}" class="pill-icon"></i>
+        {{ categoria.nome }}
       </a>
-      <a href="{% url 'categorias' %}?tipo=ebooks" class="category-pill">
-        <i data-lucide="book-open" class="pill-icon"></i>
-        E-books
-      </a>
-      <a href="{% url 'categorias' %}?tipo=templates" class="category-pill">
-        <i data-lucide="layout-template" class="pill-icon"></i>
-        Templates
-      </a>
-      <a href="{% url 'categorias' %}?tipo=softwares" class="category-pill">
-        <i data-lucide="cpu" class="pill-icon"></i>
-        Softwares
-      </a>
-      <a href="{% url 'categorias' %}?tipo=plugins" class="category-pill">
-        <i data-lucide="puzzle" class="pill-icon"></i>
-        Plugins
-      </a>
+      {% endfor %}
+
       <a href="{% url 'ofertas' %}" class="category-pill category-pill--highlight">
         <i data-lucide="tag" class="pill-icon"></i>
         Ofertas
@@ -213,22 +206,29 @@
           </p>
 
           <div class="product-card__footer">
-            <div class="product-card__price-wrap">
-              {% if produto.preco_original %}
-              <span class="product-card__price-original">
-                R$ {{ produto.preco_original|floatformat:2 }}
-              </span>
-              {% endif %}
-              <span class="product-card__price">
-                R$ {{ produto.preco|floatformat:2 }}
-              </span>
-            </div>
+  <div class="product-card__price-wrap">
+    {% if produto.preco_original %}
+    <span class="product-card__price-original">
+      R$ {{ produto.preco_original|floatformat:2 }}
+    </span>
+    {% endif %}
+    <span class="product-card__price">
+      R$ {{ produto.preco|floatformat:2 }}
+    </span>
+  </div>
 
-            <a href="{% url 'comprar_produto' produto.id %}"
-               class="btn btn--primary btn--sm product-card__buy">
-              Comprar
-            </a>
-          </div>
+  <div style="display:flex;gap:var(--s2);">
+    <a href="{% url 'adicionar_carrinho' produto.id %}"
+       class="btn btn--ghost btn--sm"
+       title="Adicionar ao carrinho">
+      <i data-lucide="shopping-cart" style="width:14px;height:14px;stroke-width:1.75;"></i>
+    </a>
+    <a href="{% url 'comprar_produto' produto.id %}"
+       class="btn btn--primary btn--sm">
+      Comprar
+    </a>
+  </div>
+</div>
 
         </div>
       </article>

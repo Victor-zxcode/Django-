@@ -128,3 +128,43 @@ class ItemPedido(models.Model):
     def __str__(self):
         return f'{self.produto.nome} — Pedido #{self.pedido.id}'
 
+
+
+class Carrinho(models.Model):
+    usuario       = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='carrinho')
+    criado_em     = models.DateTimeField(auto_now_add=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Carrinho'
+        verbose_name_plural = 'Carrinhos'
+
+    def __str__(self):
+        return f'Carrinho de {self.usuario.username}'
+
+    @property
+    def total(self):
+        return sum(item.subtotal for item in self.itens.all())
+
+    @property
+    def quantidade_itens(self):
+        return self.itens.count()
+
+
+class ItemCarrinho(models.Model):
+    carrinho      = models.ForeignKey(Carrinho, on_delete=models.CASCADE, related_name='itens')
+    produto       = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='itens_carrinho')
+    adicionado_em = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Item do Carrinho'
+        verbose_name_plural = 'Itens do Carrinho'
+        # Impede duplicata do mesmo produto no carrinho
+        unique_together = ('carrinho', 'produto')
+
+    def __str__(self):
+        return f'{self.produto.nome} — carrinho de {self.carrinho.usuario.username}'
+
+    @property
+    def subtotal(self):
+        return self.produto.preco

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Usuario, Produto, Categoria, Pedido, ItemPedido
+from .models import Usuario, Produto, Categoria, Pedido, ItemPedido, Carrinho, ItemCarrinho
 
 
 @admin.register(Usuario)
@@ -39,3 +39,14 @@ class PedidoAdmin(admin.ModelAdmin):
     search_fields   = ['usuario__username']
     readonly_fields = ['total', 'criado_em', 'atualizado_em']
     inlines         = [ItemPedidoInline]
+
+
+class ItemCarrinhoInline(admin.TabularInline):
+    model  = ItemCarrinho
+    extra  = 0
+    fields = ['produto']
+
+@admin.register(Carrinho)
+class CarrinhoAdmin(admin.ModelAdmin):
+    list_display = ['usuario', 'quantidade_itens', 'total', 'atualizado_em']
+    inlines      = [ItemCarrinhoInline]

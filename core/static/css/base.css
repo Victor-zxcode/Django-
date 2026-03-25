@@ -370,3 +370,23 @@ button { font-family: inherit; cursor: pointer; }
   background: rgba(255,255,255,.6);
 }
 .btn-home:active { transform: translateY(0); }
+
+
+
+.navbar__cart { position: relative; }
+.navbar__cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  background: var(--blue);
+  color: var(--white);
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--white);
+}

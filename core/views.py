@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Produto, Categoria, Pedido, ItemPedido
+from .models import Produto, Categoria, Pedido, ItemPedido, Carrinho, ItemCarrinho
 from .forms import FormCadastro, FormLogin, FormContato
 from django.db import models
 from django.core.paginator import Paginator
@@ -18,12 +18,16 @@ def home(request):
 
     categorias = Categoria.objects.filter(ativa=True)
 
-    context = {
-        'produtos': produtos,
-        'categorias': categorias,
+    carrinho = None
+    if request.user.is_authenticated:
+        carrinho, _ = Carrinho.objects.get_or_create(usuario=request.user)
+
+    return render(request, 'home.html', {
+        'produtos':       produtos,
+        'categorias':     categorias,
         'total_produtos': Produto.objects.filter(status='ativo').count(),
-    }
-    return render(request, 'home.html', context)
+        'carrinho':       carrinho,
+    })
 
 
 from django.core.paginator import Paginator
@@ -245,3 +249,82 @@ def minha_conta(request):
 
 def como_funciona(request):
     return render(request, 'como_funciona.html', {})
+
+
+
+# ── Carrinho ─────────────────────────────────────────────────────
+
+@login_required
+def carrinho(request):
+    carrinho, _ = Carrinho.objects.get_or_create(usuario=request.user)
+    return render(request, 'carrinho.html', {'carrinho': carrinho})
+
+
+@login_required
+def adicionar_carrinho(request, produto_id):
+    produto  = get_object_or_404(Produto, id=produto_id, status='ativo')
+    carrinho, _ = Carrinho.objects.get_or_create(usuario=request.user)
+    item, criado = ItemCarrinho.objects.get_or_create(carrinho=carrinho, produto=produto)
+
+    if criado:
+        messages.success(request, f'"{produto.nome}" adicionado ao carrinho.')
+    else:
+        messages.info(request, f'"{produto.nome}" já está no seu carrinho.')
+
+    # Volta para a página anterior ou vai para o carrinho
+    return redirect(request.META.get('HTTP_REFERER', 'carrinho'))
+
+
+@login_required
+def remover_carrinho(request, item_id):
+    item = get_object_or_404(ItemCarrinho, id=item_id, carrinho__usuario=request.user)
+    nome = item.produto.nome
+    item.delete()
+    messages.success(request, f'"{nome}" removido do carrinho.')
+    return redirect('carrinho')
+
+
+@login_required
+def finalizar_carrinho(request):
+    if request.method != 'POST':
+        return redirect('carrinho')
+
+    carrinho = get_object_or_404(Carrinho, usuario=request.user)
+
+    if not carrinho.itens.exists():
+        messages.warning(request, 'Seu carrinho está vazio.')
+        return redirect('carrinho')
+
+    # Cria um pedido com todos os itens do carrinho
+    pedido = Pedido.objects.create(
+        usuario=request.user,
+        status=Pedido.Status.PAGO,
+        total=carrinho.total
+    )
+
+    for item in carrinho.itens.all():
+        # Evita duplicata — pula produto já comprado
+        ja_comprou = ItemPedido.objects.filter(
+            pedido__usuario=request.user,
+            pedido__status='pago',
+            produto=item.produto
+        ).exists()
+
+        if not ja_comprou:
+            ItemPedido.objects.create(
+                pedido=pedido,
+                produto=item.produto,
+                preco=item.produto.preco
+            )
+
+    # Limpa o carrinho após finalizar
+    carrinho.itens.all().delete()
+
+    # Envia e-mail de confirmação
+    try:
+        enviar_email_confirmacao_compra(pedido)
+    except Exception as e:
+        print(f'Erro ao enviar e-mail: {e}')
+
+    messages.success(request, 'Pedido realizado com sucesso!')
+    return redirect('pedido_confirmado', pedido_id=pedido.id)
