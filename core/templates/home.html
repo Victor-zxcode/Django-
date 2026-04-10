@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}DigitalHub{% endblock %}
+{% block title %}DigitalHub — Produtos Digitais{% endblock %}
 
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
@@ -9,55 +9,46 @@
 
 {% block content %}
 
-<!-- ═══════════════════════════════════════════
-     NAVBAR
-═══════════════════════════════════════════ -->
+<!-- NAVBAR -->
 <header class="navbar" id="navbar">
   <div class="navbar__inner">
-
     <a href="{% url 'home' %}" class="navbar__logo">
       <span class="navbar__logo-icon">
         <i data-lucide="layers" style="width:14px;height:14px;stroke-width:2;color:white;"></i>
       </span>
-      <span class="navbar__logo-text">DigitalHub</span>
+      DigitalHub
     </a>
-
     <nav class="navbar__links" id="navLinks">
-      <a href="{% url 'home' %}"       class="navbar__link navbar__link--active">Home</a>
-      <a href="{% url 'produtos' %}"   class="navbar__link">Produtos</a>
-      <a href="{% url 'categorias' %}" class="navbar__link">Categorias</a>
-      <a href="{% url 'ofertas' %}"    class="navbar__link">Ofertas</a>
-      <a href="{% url 'como_funciona' %}"  class="navbar__link">Como funciona</a>
-      <a href="{% url 'contato' %}"    class="navbar__link">Contato</a>
+      <a href="{% url 'home' %}"          class="navbar__link navbar__link--active">Home</a>
+      <a href="{% url 'produtos' %}"      class="navbar__link">Produtos</a>
+      <a href="{% url 'categorias' %}"    class="navbar__link">Categorias</a>
+      <a href="{% url 'ofertas' %}"       class="navbar__link">Ofertas</a>
+      <a href="{% url 'como_funciona' %}" class="navbar__link">Como funciona</a>
+      <a href="{% url 'contato' %}"       class="navbar__link">Contato</a>
     </nav>
-
     <div class="navbar__actions">
-  {% if user.is_authenticated %}
-    <a href="{% url 'carrinho' %}" class="btn btn--ghost navbar__cart">
-      <i data-lucide="shopping-cart" style="width:16px;height:16px;stroke-width:1.75;"></i>
-      {% if carrinho and carrinho.quantidade_itens > 0 %}
-      <span class="navbar__cart-badge">{{ carrinho.quantidade_itens }}</span>
+      {% if user.is_authenticated %}
+        <a href="{% url 'carrinho' %}" class="btn btn--ghost navbar__cart">
+          <i data-lucide="shopping-cart" style="width:16px;height:16px;stroke-width:1.75;"></i>
+          {% if carrinho and carrinho.quantidade_itens > 0 %}
+          <span class="navbar__cart-badge">{{ carrinho.quantidade_itens }}</span>
+          {% endif %}
+        </a>
+        <a href="{% url 'minha_conta' %}" class="btn btn--ghost">{{ user.username }}</a>
+        <a href="{% url 'logout' %}"      class="btn btn--primary">Sair</a>
+      {% else %}
+        <a href="{% url 'login' %}"    class="btn btn--ghost">Entrar</a>
+        <a href="{% url 'cadastro' %}" class="btn btn--primary">Começar</a>
       {% endif %}
-    </a>
-    <a href="{% url 'minha_conta' %}" class="btn btn--ghost">{{ user.username }}</a>
-    <a href="{% url 'logout' %}"      class="btn btn--primary">Sair</a>
-  {% else %}
-    <a href="{% url 'login' %}"    class="btn btn--ghost">Entrar</a>
-    <a href="{% url 'cadastro' %}" class="btn btn--primary">Cadastrar</a>
-  {% endif %}
-</div>
-
+    </div>
     <button class="navbar__hamburger" id="hamburgerBtn" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
-
   </div>
 </header>
 
 
-<!-- ═══════════════════════════════════════════
-     HERO
-═══════════════════════════════════════════ -->
+<!-- HERO -->
 <section class="hero">
   <div class="hero__bg-grid"></div>
   <div class="hero__orb hero__orb--1"></div>
@@ -66,12 +57,12 @@
   <div class="hero__inner">
     <div class="hero__badge">
       <span class="hero__badge-dot"></span>
-      Milhares de produtos digitais disponíveis
+      Mais de 3.000 produtos digitais
     </div>
 
     <h1 class="hero__title">
-      Seu próximo nível<br>
-      começa <em>aqui.</em>
+      Conhecimento
+      <em>que transforma.</em>
     </h1>
 
     <p class="hero__subtitle">
@@ -81,22 +72,23 @@
 
     <div class="hero__cta">
       {% if user.is_authenticated %}
-<a href="{% url 'produtos' %}" class="btn btn--primary btn--lg">
-  Explorar produtos
-  <i data-lucide="arrow-right" style="width:16px;height:16px;stroke-width:2;"></i>
-</a>
-{% else %}
-<a href="{% url 'cadastro' %}" class="btn btn--primary btn--lg">
-  Começar agora
-  <i data-lucide="arrow-right" style="width:16px;height:16px;stroke-width:2;"></i>
-</a>
-{% endif %}
+      <a href="{% url 'produtos' %}" class="btn btn--primary btn--lg">
+        Explorar produtos
+        <i data-lucide="arrow-right" style="width:16px;height:16px;stroke-width:2;"></i>
+      </a>
+      {% else %}
+      <a href="{% url 'cadastro' %}" class="btn btn--primary btn--lg">
+        Começar agora
+        <i data-lucide="arrow-right" style="width:16px;height:16px;stroke-width:2;"></i>
+      </a>
+      {% endif %}
+      <a href="{% url 'produtos' %}" class="btn btn--ghost btn--lg">Ver produtos</a>
     </div>
 
     <div class="hero__stats">
       <div class="hero__stat">
         <strong>12k+</strong>
-        <span>Alunos ativos</span>
+        <span>Alunos</span>
       </div>
       <div class="hero__stat-divider"></div>
       <div class="hero__stat">
@@ -111,6 +103,30 @@
     </div>
   </div>
 
+  <div class="hero__visual">
+    {% if produtos %}
+    {% with produto=produtos.0 %}
+    <div class="hero__card">
+      <div class="hero__card-label">
+        {% if produto.categoria %}{{ produto.categoria.nome }}{% else %}Destaque{% endif %}
+      </div>
+      <div class="hero__card-title">{{ produto.nome }}</div>
+      <div class="hero__card-price">R$ {{ produto.preco|floatformat:2 }}</div>
+      <a href="{% url 'produto_detalhe' produto.id %}" class="hero__card-btn">
+        Ver produto
+        <i data-lucide="arrow-right" style="width:14px;height:14px;stroke-width:2;"></i>
+      </a>
+    </div>
+    {% endwith %}
+    {% endif %}
+
+    <div class="hero__tags">
+      {% for cat in categorias %}
+      <a href="{% url 'categoria_detalhe' cat.slug %}" class="hero__tag">{{ cat.nome }}</a>
+      {% endfor %}
+    </div>
+  </div>
+
   <div class="hero__scroll-hint">
     <span>scroll</span>
     <div class="hero__scroll-line"></div>
@@ -118,42 +134,33 @@
 </section>
 
 
-<!-- ═══════════════════════════════════════════
-     CATEGORIAS RÁPIDAS
-═══════════════════════════════════════════ -->
+<!-- CATEGORIAS -->
 <section class="categories">
   <div class="container">
     <div class="categories__grid">
-
       {% for categoria in categorias %}
       <a href="{% url 'categoria_detalhe' categoria.slug %}" class="category-pill">
         <i data-lucide="{{ categoria.icone_lucide|default:'folder' }}" class="pill-icon"></i>
         {{ categoria.nome }}
       </a>
       {% endfor %}
-
       <a href="{% url 'ofertas' %}" class="category-pill category-pill--highlight">
         <i data-lucide="tag" class="pill-icon"></i>
         Ofertas
       </a>
-
     </div>
   </div>
 </section>
 
 
-<!-- ═══════════════════════════════════════════
-     PRODUTOS EM DESTAQUE
-═══════════════════════════════════════════ -->
+<!-- PRODUTOS EM DESTAQUE -->
 <section class="products" id="produtos">
   <div class="container">
 
     <div class="section-header">
       <div class="section-header__label">Destaques</div>
       <h2 class="section-header__title">Produtos em alta</h2>
-      <p class="section-header__subtitle">
-        Os mais acessados e avaliados pela nossa comunidade esta semana.
-      </p>
+      <p class="section-header__subtitle">Os mais acessados pela nossa comunidade esta semana.</p>
       <a href="{% url 'produtos' %}" class="section-header__link">
         Ver todos
         <i data-lucide="arrow-right" style="width:15px;height:15px;stroke-width:2;"></i>
@@ -161,181 +168,131 @@
     </div>
 
     <div class="products__grid">
-
       {% for produto in produtos %}
       <article class="product-card" data-index="{{ forloop.counter }}">
-
         <div class="product-card__image-wrap">
           {% if produto.imagem %}
-            <img
-              src="{{ produto.imagem.url }}"
-              alt="{{ produto.nome }}"
-              class="product-card__image"
-              loading="lazy"
-            >
+            <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" class="product-card__image" loading="lazy">
           {% else %}
             <div class="product-card__image-placeholder">
               <i data-lucide="image" style="width:36px;height:36px;stroke-width:1;"></i>
             </div>
           {% endif %}
-
           {% if produto.tem_desconto %}
-          <span class="product-card__badge product-card__badge--sale">
-            -{{ produto.percentual_desconto }}%
-          </span>
+          <span class="product-card__badge product-card__badge--sale">-{{ produto.percentual_desconto }}%</span>
           {% endif %}
-
           <div class="product-card__overlay">
-            <a href="{% url 'produto_detalhe' produto.id %}" class="btn btn--ghost btn--sm">
-              Ver detalhes
-            </a>
+            <a href="{% url 'produto_detalhe' produto.id %}" class="btn btn--ghost btn--sm">Ver detalhes</a>
           </div>
         </div>
-
         <div class="product-card__body">
           {% if produto.categoria %}
           <span class="product-card__category">{{ produto.categoria }}</span>
           {% endif %}
-
           <h3 class="product-card__title">
             <a href="{% url 'produto_detalhe' produto.id %}">{{ produto.nome }}</a>
           </h3>
-
-          <p class="product-card__desc">
-            {{ produto.resumo|default:produto.descricao|truncatewords:18 }}
-          </p>
-
+          <p class="product-card__desc">{{ produto.resumo|default:produto.descricao|truncatewords:18 }}</p>
           <div class="product-card__footer">
-  <div class="product-card__price-wrap">
-    {% if produto.preco_original %}
-    <span class="product-card__price-original">
-      R$ {{ produto.preco_original|floatformat:2 }}
-    </span>
-    {% endif %}
-    <span class="product-card__price">
-      R$ {{ produto.preco|floatformat:2 }}
-    </span>
-  </div>
-
-  <div style="display:flex;gap:var(--s2);">
-    <a href="{% url 'adicionar_carrinho' produto.id %}"
-       class="btn btn--ghost btn--sm"
-       title="Adicionar ao carrinho">
-      <i data-lucide="shopping-cart" style="width:14px;height:14px;stroke-width:1.75;"></i>
-    </a>
-    <a href="{% url 'comprar_produto' produto.id %}"
-       class="btn btn--primary btn--sm">
-      Comprar
-    </a>
-  </div>
-</div>
-
+            <div class="product-card__price-wrap">
+              {% if produto.preco_original %}
+              <span class="product-card__price-original">R$ {{ produto.preco_original|floatformat:2 }}</span>
+              {% endif %}
+              <span class="product-card__price">R$ {{ produto.preco|floatformat:2 }}</span>
+            </div>
+            <div style="display:flex;gap:var(--s2);">
+              <a href="{% url 'adicionar_carrinho' produto.id %}" class="btn btn--ghost btn--sm" title="Adicionar ao carrinho">
+                <i data-lucide="shopping-cart" style="width:14px;height:14px;stroke-width:1.75;"></i>
+              </a>
+              <a href="{% url 'comprar_produto' produto.id %}" class="btn btn--primary btn--sm">Comprar</a>
+            </div>
+          </div>
         </div>
       </article>
       {% empty %}
       <div class="products__empty">
-        <i data-lucide="package-open" style="width:48px;height:48px;stroke-width:1;color:var(--ink-200);"></i>
+        <i data-lucide="package-open" style="width:48px;height:48px;stroke-width:1;color:var(--ink-ghost);"></i>
         <p>Nenhum produto disponível no momento.</p>
         <a href="{% url 'contato' %}" class="btn btn--outline">Entrar em contato</a>
       </div>
       {% endfor %}
-
     </div>
+
   </div>
 </section>
 
 
-
-<!-- ═══════════════════════════════════════════
-     BANNER CTA
-═══════════════════════════════════════════ -->
+<!-- CTA BANNER -->
 <section class="cta-banner">
   <div class="container">
     <div class="cta-banner__inner">
       <div class="cta-banner__content">
         <h2 class="cta-banner__title">Pronto para começar a vender?</h2>
-        <p class="cta-banner__text">
-          Publique seus produtos digitais e alcance milhares de compradores hoje mesmo.
-        </p>
+        <p class="cta-banner__text">Publique seus produtos digitais e alcance milhares de compradores hoje mesmo.</p>
       </div>
       <div class="cta-banner__actions">
         <a href="{% url 'cadastro' %}" class="btn btn--white btn--lg">
           Criar conta grátis
           <i data-lucide="arrow-right" style="width:16px;height:16px;stroke-width:2;"></i>
         </a>
-        <a href="{% url 'contato' %}" class="btn btn--ghost-white btn--lg">
-          Falar com a equipe
-        </a>
+        <a href="{% url 'contato' %}" class="btn btn--ghost-white btn--lg">Falar com a equipe</a>
       </div>
     </div>
   </div>
 </section>
 
 
-<!-- ═══════════════════════════════════════════
-     FOOTER
-═══════════════════════════════════════════ -->
+<!-- FOOTER -->
 <footer class="footer">
   <div class="container">
     <div class="footer__top">
-
       <div class="footer__brand">
-        <a href="{% url 'home' %}" class="navbar__logo" style="margin-bottom:var(--s4);display:inline-flex;">
+        <a href="{% url 'home' %}" class="navbar__logo" style="display:inline-flex;margin-bottom:var(--s4);">
           <span class="navbar__logo-icon">
             <i data-lucide="layers" style="width:14px;height:14px;stroke-width:2;color:white;"></i>
           </span>
-          <span class="navbar__logo-text" style="color:white;">DigitalHub</span>
+          <span style="color:white;font-style:italic;">DigitalHub</span>
         </a>
         <p>O marketplace de produtos digitais feito para quem cria e para quem aprende.</p>
       </div>
-
       <div class="footer__links-group">
         <h4>Plataforma</h4>
         <a href="{% url 'produtos' %}">Produtos</a>
         <a href="{% url 'categorias' %}">Categorias</a>
         <a href="{% url 'ofertas' %}">Ofertas</a>
       </div>
-
       <div class="footer__links-group">
         <h4>Empresa</h4>
-        <a href="#">Sobre nós</a>
+        <a href="{% url 'como_funciona' %}">Como funciona</a>
         <a href="{% url 'contato' %}">Contato</a>
         <a href="#">Blog</a>
       </div>
-
       <div class="footer__links-group">
         <h4>Legal</h4>
         <a href="#">Privacidade</a>
         <a href="#">Termos de uso</a>
         <a href="#">Cookies</a>
       </div>
-
     </div>
-
     <div class="footer__bottom">
       <p>© {% now "Y" %} DigitalHub. Todos os direitos reservados.</p>
     </div>
   </div>
 </footer>
 
-
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>
   lucide.createIcons();
-
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('navbar--scrolled', window.scrollY > 20);
   }, { passive: true });
-
   const hamburger = document.getElementById('hamburgerBtn');
   const navLinks  = document.getElementById('navLinks');
   hamburger.addEventListener('click', () => {
     navLinks.classList.toggle('navbar__links--open');
     hamburger.classList.toggle('navbar__hamburger--open');
   });
-
-  // Cards entrance
   const cards = document.querySelectorAll('.product-card');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -346,18 +303,6 @@
     });
   }, { threshold: 0.1 });
   cards.forEach(card => observer.observe(card));
-
-  // Passos entrance
-  const passos = document.querySelectorAll('.passo');
-  const obsPassos = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('passo--visible'), i * 120);
-        obsPassos.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
-  passos.forEach(p => obsPassos.observe(p));
 </script>
 
 {% endblock %}
