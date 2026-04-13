@@ -8,7 +8,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
@@ -16,6 +16,67 @@
 </head>
 <body>
 
+<!-- ═══════════════════════════════════════════
+     NAVBAR GLOBAL
+═══════════════════════════════════════════ -->
+<header class="navbar" id="navbar">
+  <div class="navbar__inner">
+
+    <a href="{% url 'home' %}" class="navbar__logo">
+      <span class="navbar__logo-icon">
+        <i data-lucide="layers" style="width:14px;height:14px;stroke-width:2;color:white;"></i>
+      </span>
+      DigitalHub
+    </a>
+
+    <nav class="navbar__links" id="navLinks">
+      <a href="{% url 'home' %}"
+         class="navbar__link {% if request.resolver_match.url_name == 'home' %}navbar__link--active{% endif %}">
+        Home
+      </a>
+      <a href="{% url 'produtos' %}"
+         class="navbar__link {% if request.resolver_match.url_name == 'produtos' %}navbar__link--active{% endif %}">
+        Produtos
+      </a>
+      <a href="{% url 'categorias' %}"
+         class="navbar__link {% if request.resolver_match.url_name == 'categorias' %}navbar__link--active{% endif %}">
+        Categorias
+      </a>
+      <a href="{% url 'ofertas' %}"
+         class="navbar__link {% if request.resolver_match.url_name == 'ofertas' %}navbar__link--active{% endif %}">
+        Ofertas
+      </a>
+      <a href="{% url 'como_funciona' %}"
+         class="navbar__link {% if request.resolver_match.url_name == 'como_funciona' %}navbar__link--active{% endif %}">
+        Como funciona
+      </a>
+      <a href="{% url 'contato' %}"
+         class="navbar__link {% if request.resolver_match.url_name == 'contato' %}navbar__link--active{% endif %}">
+        Contato
+      </a>
+    </nav>
+
+    <div class="navbar__actions">
+      {% if user.is_authenticated %}
+        <a href="{% url 'carrinho' %}" class="btn btn--ghost navbar__cart">
+          <i data-lucide="shopping-cart" style="width:16px;height:16px;stroke-width:1.75;"></i>
+        </a>
+        <a href="{% url 'minha_conta' %}" class="btn btn--ghost">{{ user.username }}</a>
+        <a href="{% url 'logout' %}"      class="btn btn--primary">Sair</a>
+      {% else %}
+        <a href="{% url 'login' %}"    class="btn btn--ghost">Entrar</a>
+        <a href="{% url 'cadastro' %}" class="btn btn--primary">Começar</a>
+      {% endif %}
+    </div>
+
+    <button class="navbar__hamburger" id="hamburgerBtn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+
+  </div>
+</header>
+
+<!-- Mensagens globais -->
 {% if messages %}
 <div class="mensagens-globais">
   {% for message in messages %}
@@ -29,9 +90,34 @@
 
 {% block content %}{% endblock %}
 
+<!-- Botão home flutuante -->
 {% if request.resolver_match.url_name != 'home' %}
 <a href="{% url 'home' %}" class="btn-home">Início</a>
 {% endif %}
+
+<!-- Lucide global -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+  lucide.createIcons();
+
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  if (navbar) {
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('navbar--scrolled', window.scrollY > 20);
+    }, { passive: true });
+  }
+
+  // Hamburger
+  const hamburger = document.getElementById('hamburgerBtn');
+  const navLinks  = document.getElementById('navLinks');
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('navbar__links--open');
+      hamburger.classList.toggle('navbar__hamburger--open');
+    });
+  }
+</script>
 
 </body>
 </html>

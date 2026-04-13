@@ -9,45 +9,6 @@
 
 {% block content %}
 
-<!-- NAVBAR -->
-<header class="navbar" id="navbar">
-  <div class="navbar__inner">
-    <a href="{% url 'home' %}" class="navbar__logo">
-      <span class="navbar__logo-icon">
-        <i data-lucide="layers" style="width:14px;height:14px;stroke-width:2;color:white;"></i>
-      </span>
-      DigitalHub
-    </a>
-    <nav class="navbar__links" id="navLinks">
-      <a href="{% url 'home' %}"          class="navbar__link navbar__link--active">Home</a>
-      <a href="{% url 'produtos' %}"      class="navbar__link">Produtos</a>
-      <a href="{% url 'categorias' %}"    class="navbar__link">Categorias</a>
-      <a href="{% url 'ofertas' %}"       class="navbar__link">Ofertas</a>
-      <a href="{% url 'como_funciona' %}" class="navbar__link">Como funciona</a>
-      <a href="{% url 'contato' %}"       class="navbar__link">Contato</a>
-    </nav>
-    <div class="navbar__actions">
-      {% if user.is_authenticated %}
-        <a href="{% url 'carrinho' %}" class="btn btn--ghost navbar__cart">
-          <i data-lucide="shopping-cart" style="width:16px;height:16px;stroke-width:1.75;"></i>
-          {% if carrinho and carrinho.quantidade_itens > 0 %}
-          <span class="navbar__cart-badge">{{ carrinho.quantidade_itens }}</span>
-          {% endif %}
-        </a>
-        <a href="{% url 'minha_conta' %}" class="btn btn--ghost">{{ user.username }}</a>
-        <a href="{% url 'logout' %}"      class="btn btn--primary">Sair</a>
-      {% else %}
-        <a href="{% url 'login' %}"    class="btn btn--ghost">Entrar</a>
-        <a href="{% url 'cadastro' %}" class="btn btn--primary">Começar</a>
-      {% endif %}
-    </div>
-    <button class="navbar__hamburger" id="hamburgerBtn" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</header>
-
-
 <!-- HERO -->
 <section class="hero">
   <div class="hero__bg-grid"></div>
@@ -61,8 +22,8 @@
     </div>
 
     <h1 class="hero__title">
-      Conhecimento
-      <em>que transforma.</em>
+      Conhecimento<br>
+      <span class="hero__title-accent">que transforma.</span>
     </h1>
 
     <p class="hero__subtitle">
@@ -103,6 +64,7 @@
     </div>
   </div>
 
+  <!-- Lado direito escuro -->
   <div class="hero__visual">
     {% if produtos %}
     {% with produto=produtos.0 %}
@@ -134,7 +96,7 @@
 </section>
 
 
-<!-- CATEGORIAS -->
+<!-- CATEGORIAS RÁPIDAS -->
 <section class="categories">
   <div class="container">
     <div class="categories__grid">
@@ -212,7 +174,7 @@
       {% empty %}
       <div class="products__empty">
         <i data-lucide="package-open" style="width:48px;height:48px;stroke-width:1;color:var(--ink-ghost);"></i>
-        <p>Nenhum produto disponível no momento.</p>
+        <p>Nenhum produto disponível.</p>
         <a href="{% url 'contato' %}" class="btn btn--outline">Entrar em contato</a>
       </div>
       {% endfor %}
@@ -228,7 +190,7 @@
     <div class="cta-banner__inner">
       <div class="cta-banner__content">
         <h2 class="cta-banner__title">Pronto para começar a vender?</h2>
-        <p class="cta-banner__text">Publique seus produtos digitais e alcance milhares de compradores hoje mesmo.</p>
+        <p class="cta-banner__text">Publique seus produtos digitais e alcance milhares de compradores.</p>
       </div>
       <div class="cta-banner__actions">
         <a href="{% url 'cadastro' %}" class="btn btn--white btn--lg">
@@ -247,11 +209,11 @@
   <div class="container">
     <div class="footer__top">
       <div class="footer__brand">
-        <a href="{% url 'home' %}" class="navbar__logo" style="display:inline-flex;margin-bottom:var(--s4);">
-          <span class="navbar__logo-icon">
+        <a href="{% url 'home' %}" class="footer__logo">
+          <span class="footer__logo-icon">
             <i data-lucide="layers" style="width:14px;height:14px;stroke-width:2;color:white;"></i>
           </span>
-          <span style="color:white;font-style:italic;">DigitalHub</span>
+          DigitalHub
         </a>
         <p>O marketplace de produtos digitais feito para quem cria e para quem aprende.</p>
       </div>
@@ -280,19 +242,8 @@
   </div>
 </footer>
 
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>
-  lucide.createIcons();
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('navbar--scrolled', window.scrollY > 20);
-  }, { passive: true });
-  const hamburger = document.getElementById('hamburgerBtn');
-  const navLinks  = document.getElementById('navLinks');
-  hamburger.addEventListener('click', () => {
-    navLinks.classList.toggle('navbar__links--open');
-    hamburger.classList.toggle('navbar__hamburger--open');
-  });
+  // Cards entrance
   const cards = document.querySelectorAll('.product-card');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
