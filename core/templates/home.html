@@ -81,12 +81,6 @@
     </div>
     {% endwith %}
     {% endif %}
-
-    <div class="hero__tags">
-      {% for cat in categorias %}
-      <a href="{% url 'categoria_detalhe' cat.slug %}" class="hero__tag">{{ cat.nome }}</a>
-      {% endfor %}
-    </div>
   </div>
 
   <div class="hero__scroll-hint">
