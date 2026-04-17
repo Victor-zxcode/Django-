@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}DigitalHub — Produtos Digitais{% endblock %}
+{% block title %}TechStore — Eletrônicos de Qualidade{% endblock %}
 
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
@@ -18,17 +18,17 @@
   <div class="hero__inner">
     <div class="hero__badge">
       <span class="hero__badge-dot"></span>
-      Mais de 3.000 produtos digitais
+      Produtos de qualidade premium
     </div>
 
     <h1 class="hero__title">
-      Conhecimento<br>
-      <span class="hero__title-accent">que transforma.</span>
+      Tecnologia que<br>
+      <span class="hero__title-accent">inspira e transforma.</span>
     </h1>
 
     <p class="hero__subtitle">
-      Cursos, e-books, templates e softwares criados por especialistas.
-      Aprenda, crie e evolua com produtos 100% digitais.
+      Eletrônicos de marcas conceituadas, com garantia total e suporte em português.
+      Aproveite nossas ofertas exclusivas e evolua seu estilo de vida digital.
     </p>
 
     <div class="hero__cta">
@@ -43,28 +43,30 @@
         <i data-lucide="arrow-right" style="width:16px;height:16px;stroke-width:2;"></i>
       </a>
       {% endif %}
-      <a href="{% url 'produtos' %}" class="btn btn--ghost btn--lg">Ver produtos</a>
+      <a href="{% url 'como_funciona' %}" class="btn btn--ghost btn--lg">
+        Saber mais
+      </a>
     </div>
 
     <div class="hero__stats">
       <div class="hero__stat">
-        <strong>12k+</strong>
-        <span>Alunos</span>
+        <strong>15k+</strong>
+        <span>Clientes</span>
       </div>
       <div class="hero__stat-divider"></div>
       <div class="hero__stat">
-        <strong>98%</strong>
-        <span>Satisfação</span>
+        <strong>4.9★</strong>
+        <span>Avaliação</span>
       </div>
       <div class="hero__stat-divider"></div>
       <div class="hero__stat">
-        <strong>500+</strong>
-        <span>Criadores</span>
+        <strong>24h</strong>
+        <span>Suporte</span>
       </div>
     </div>
   </div>
 
-  <!-- Lado direito escuro -->
+  <!-- Lado direito com destaque de produto -->
   <div class="hero__visual">
     {% if produtos %}
     {% with produto=produtos.0 %}
@@ -207,7 +209,7 @@
           <span class="footer__logo-icon">
             <i data-lucide="layers" style="width:14px;height:14px;stroke-width:2;color:white;"></i>
           </span>
-          DigitalHub
+          TechStore
         </a>
         <p>O marketplace de produtos digitais feito para quem cria e para quem aprende.</p>
       </div>
@@ -231,7 +233,7 @@
       </div>
     </div>
     <div class="footer__bottom">
-      <p>© {% now "Y" %} DigitalHub. Todos os direitos reservados.</p>
+      <p>© {% now "Y" %} TechStore. Todos os direitos reservados.</p>
     </div>
   </div>
 </footer>

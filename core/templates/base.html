@@ -4,13 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}DigitalHub{% endblock %}</title>
+    <title>{% block title %}TechStore - Eletrônicos de Qualidade{% endblock %}</title>
+    <meta name="description" content="TechStore: sua loja de eletrônicos com os melhores produtos e preços">
+
+    <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{% static 'favicon.svg' %}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/enhancements.css' %}">
 
     {% block extra_head %}{% endblock %}
 </head>
@@ -26,7 +31,7 @@
       <span class="navbar__logo-icon">
         <i data-lucide="layers" style="width:14px;height:14px;stroke-width:2;color:white;"></i>
       </span>
-      DigitalHub
+      TechStore
     </a>
 
     <nav class="navbar__links" id="navLinks">
@@ -97,6 +102,7 @@
 
 <!-- Lucide global -->
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="{% static 'js/enhancements.js' %}"></script>
 <script>
   lucide.createIcons();
 

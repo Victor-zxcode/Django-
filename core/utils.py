@@ -94,7 +94,7 @@ def _html_confirmacao(pedido, usuario):
       <tr>
         <td align="center" style="background-color:#f8f8fc;border-top:1px solid #e4e4ee;padding:20px 40px;">
           <p style="margin:0;font-size:0.75rem;color:#9898aa;">
-            Você recebeu este e-mail porque realizou uma compra na DigitalHub.
+            Você recebeu este e-mail porque realizou uma compra na TechStore.
           </p>
         </td>
       </tr>
@@ -187,7 +187,7 @@ def _html_boas_vindas(usuario):
       <tr>
         <td align="center" style="background-color:#f8f8fc;border-top:1px solid #e4e4ee;padding:20px 40px;">
           <p style="margin:0;font-size:0.75rem;color:#9898aa;">
-            Você recebeu este e-mail porque criou uma conta na DigitalHub.
+            Você recebeu este e-mail porque criou uma conta na TechStore.
           </p>
         </td>
       </tr>
@@ -217,7 +217,7 @@ def enviar_email_boas_vindas(usuario):
     html = _html_boas_vindas(usuario)
 
     email = EmailMultiAlternatives(
-        subject='👋 Bem-vindo à DigitalHub!',
+        subject='👋 Bem-vindo à TechStore!',
         body=f'Olá {usuario.username}, sua conta foi criada com sucesso!',
         from_email=settings.DEFAULT_FROM_EMAIL,
         to=[usuario.email],

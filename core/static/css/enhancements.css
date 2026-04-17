@@ -1,0 +1,267 @@
+/* ══════════════════════════════════════════════════════════════════
+   enhancements.css — Melhorias visuais modernas
+   Efeitos, animações e transições para melhor UX
+══════════════════════════════════════════════════════════════════ */
+
+/* ─── EFEITOS DE HOVER GLOBAIS ─────────────────────────────────── */
+.pcard {
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--index, 0) * 0.05s);
+}
+
+.pcard:hover {
+  animation: none;
+}
+
+.pcard__media {
+  position: relative;
+  overflow: hidden;
+}
+
+.pcard__media::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(59, 55, 204, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.pcard:hover .pcard__media::before {
+  opacity: 1;
+}
+
+/* ─── CARDS COM GLASSMORPHISM ─────────────────────────────────── */
+.pcard__body {
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(248, 247, 244, 0.5);
+}
+
+/* ─── BOTÕES COM EFEITOS RIPPLE ─────────────────────────────────── */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.btn:active::after {
+  animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+  to {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+  }
+}
+
+/* ─── INPUTS COM FOCUS ANIMADO ─────────────────────────────────── */
+.form-input {
+  position: relative;
+}
+
+.form-input::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--indigo));
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.form-input:focus::before {
+  width: 100%;
+}
+
+/* ─── CARDS DE CATEGORIA COM EFEITO 3D ─────────────────────────────– */
+.category-pill {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: perspective(1000px) rotateX(0deg);
+}
+
+.category-pill:hover {
+  transform: perspective(1000px) rotateX(5deg) translateY(-2px);
+  box-shadow: 0 12px 32px rgba(59, 55, 204, 0.15);
+}
+
+/* ─── ELEMENTOS COM GRADIENTE ANIMADO ─────────────────────────────– */
+.hero__orb {
+  animation: float 6s ease-in-out infinite;
+}
+
+.hero__orb--2 {
+  animation-delay: -3s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  25% { transform: translateY(-20px) translateX(10px); }
+  50% { transform: translateY(-40px) translateX(0px); }
+  75% { transform: translateY(-20px) translateX(-10px); }
+}
+
+/* ─── BADGE COM PULSE ─────────────────────────────────────────────– */
+.hero__badge {
+  animation: slideInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero__badge-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+  margin-right: 4px;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ─── NAVBAR COM EFEITO BLUR MELHORADO ─────────────────────────────– */
+.navbar {
+  animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── LOADER CUSTOMIZADO ─────────────────────────────────────────– */
+.loader {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(59, 55, 204, 0.2);
+  border-top-color: var(--indigo);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── MODAL COM FADE SUAVE ─────────────────────────────────────────– */
+.modal {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal__overlay {
+  animation: fadeIn 0.3s ease-out;
+  backdrop-filter: blur(4px);
+}
+
+.modal__content {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── SKELETON LOADING ─────────────────────────────────────────────– */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: loading 2s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ─── SCROLL SUAVE ─────────────────────────────────────────────────– */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ─── TRANSITIONS GLOBAIS ─────────────────────────────────────────– */
+* {
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-property: background-color, color, border-color, box-shadow, transform;
+}
+
+button, a, input {
+  transition-property: background-color, color, border-color, box-shadow, transform, opacity;
+}
+
+/* ─── DARK MODE SUPPORT ────────────────────────────────────────────– */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+  
+  body {
+    background: var(--ink);
+    color: var(--cream);
+  }
+}
+
+/* ─── MOTION PREFERENCES ────────────────────────────────────────────– */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── SCROLL REVEALS ────────────────────────────────────────────────– */
+[data-scroll-reveal] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-scroll-reveal].in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
